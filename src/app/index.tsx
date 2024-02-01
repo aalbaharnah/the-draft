@@ -1,12 +1,13 @@
-import { ScrollView, Text, View, StyleSheet, TextInput, KeyboardAvoidingView, SafeAreaView } from "react-native";
+import { View, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
 import Constants from "expo-constants";
-import MainCard from "../components/main-card";
-import Animated, { FadeIn, FadeInDown, Easing, useSharedValue, withTiming, withDelay, withSpring, LinearTransition, FadeOut, ZoomOutDown, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate } from "react-native-reanimated";
+import Animated, { FadeInDown, useSharedValue, withDelay, withSpring, LinearTransition, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate, FadeOutDown } from "react-native-reanimated";
 import { useCallback, useMemo, useState } from "react";
-import Touchable from "../components/touchable";
-import { Ionicons } from '@expo/vector-icons';
 import AddButon from "../components/add-button";
 import useDimensions from "../hooks/useDimensions";
+import Player from "../components/player";
+import MainInput from "../components/main-input";
+import Touchable from "../components/touchable";
+import { Ionicons } from "@expo/vector-icons";
 
 
 export default function Index() {
@@ -27,7 +28,10 @@ export default function Index() {
     const [name, setName] = useState("");
 
     const addPlayer = useCallback(() => {
-        if (!name || name.trim().length === 0) return;
+        if (!name || name.trim().length === 0) {
+            Keyboard.dismiss();
+            return;
+        }
         setPlayers([...players, { name, id: Math.random().toString() }])
         setName("");
         list.current?.scrollToEnd();
@@ -48,6 +52,7 @@ export default function Index() {
     const animatedContainer = useAnimatedStyle(() => {
         return {
             height: interpolate(y.value, [0, 40], [200, 120], 'clamp'),
+            borderBottomWidth: interpolate(y.value, [0, 1], [0, 1], 'clamp'),
         }
     }, [])
 
@@ -59,87 +64,82 @@ export default function Index() {
 
     const animatedSubText = useAnimatedStyle(() => {
         return {
-            opacity: interpolate(y.value, [0, 40], [1, 0], 'clamp'),
+            opacity: interpolate(y.value, [0, 10], [1, 0], 'clamp'),
             fontSize: interpolate(y.value, [0, 10, 40], [24, 18, 16], 'clamp'),
         }
     }, [])
 
     return (
-        <KeyboardAvoidingView style={{ height }} className="bg-background" behavior="padding">
-            <Animated.View className="px-4 overflow-hidden bg-background" style={[animatedContainer, {
-                paddingTop: Constants.statusBarHeight,
-                borderBottomWidth: 1,
-                borderColor: '#b3b3b3'
-            }]}>
-                <Animated.Text
-                    style={animatedText}
-                    entering={FadeInDown.duration(200).delay(400)}
-                    className="text-right font-Rakkas my-4"
-                >
-                    القرعة
-                </Animated.Text>
-                <Animated.Text style={animatedSubText} className="text-right font-Lateef-Regular text-2xl">
-                    اضف اللاعبين الذين ستتم القرعة عليهم
-                </Animated.Text>
-            </Animated.View>
-            <View className="flex-1" />
-
-            <Animated.FlatList
-                ref={list}
-                data={data}
-                onScroll={onScroll}
-                alwaysBounceVertical={false}
-                keyboardDismissMode={'on-drag'}
-                layout={
-                    LinearTransition.springify()
-                        .damping(23)
-                        .stiffness(100)
-                        .overshootClamping(0)
-                        .restDisplacementThreshold(0.01)
-                        .restSpeedThreshold(2)
-                }
-                keyExtractor={item => item.id}
-
-                style={{ flexGrow: 0 }}
-                renderItem={({ item, index }) => (
-                    <Animated.View exiting={ZoomOutDown} className="items-center flex-row mx-4">
-                        <Text>{index + 1}:</Text>
-                        <Animated.View className="flex-1 mr-3">
-                            <TextInput
-                                placeholder="اسم اللاعب"
-                                value={item.name}
-                                onChangeText={
-                                    (value) => {
-                                        const newPlayers = [...players];
-                                        newPlayers[index].name = value;
-                                        setPlayers(newPlayers);
-                                    }
-                                }
-                                className="h-12 px-2"
-                            />
-                        </Animated.View>
-                        <Touchable
-                            className="h-12 w-12 items-center justify-center"
-                            onPress={() => removePlayer(item.id)}
-                        >
-                            <Text>🗑️</Text>
+        <View className="flex-1 bg-background">
+            <KeyboardAvoidingView contentContainerStyle={{ height: Platform.OS === 'ios' ? height : height + Constants.statusBarHeight }} behavior="position">
+                <Animated.View className="px-4 overflow-hidden  bg-background absolute top-0 w-full" style={[animatedContainer, {
+                    paddingTop: Constants.statusBarHeight,
+                    borderColor: '#b3b3b3',
+                    zIndex: 1,
+                }]}>
+                    <View className="flex-row items-center justify-between">
+                        <Touchable className="flex-row items-center">
+                            <Ionicons name="arrow-back" size={24} color="#056CC1" />
+                            <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-primary">
+                                يلا
+                            </Animated.Text>
                         </Touchable>
-                    </Animated.View>
-                )}
-            />
-
-            <SafeAreaView className="items-center flex-row mx-4 mb-4">
-                <Animated.View className="flex-1 mr-3">
-                    <TextInput
-                        placeholder="اسم اللاعب"
-                        value={name}
-                        onChangeText={setName}
-                        className="bg-white rounded-lg  h-12 px-2"
-                        onSubmitEditing={addPlayer}
-                    />
+                        <Animated.Text
+                            style={animatedText}
+                            entering={FadeInDown.duration(200).delay(400)}
+                            className="text-right font-Rakkas my-4"
+                        >
+                            القرعة
+                        </Animated.Text>
+                    </View>
+                    <Animated.Text style={animatedSubText} className="text-right font-Rakkas text-2xl">
+                        اضف اسماء اللاعبين الذين ستتم القرعة عليهم
+                    </Animated.Text>
                 </Animated.View>
-                <AddButon onPress={addPlayer} />
-            </SafeAreaView>
-        </KeyboardAvoidingView>
+                <View className="flex-1" />
+
+                <Animated.FlatList
+                    ref={list}
+                    data={data}
+                    onScroll={onScroll}
+                    alwaysBounceVertical={false}
+                    showsVerticalScrollIndicator={false}
+                    keyboardDismissMode={'on-drag'}
+                    layout={
+                        LinearTransition.springify()
+                            .damping(23)
+                            .stiffness(100)
+                            .overshootClamping(0)
+                            .restDisplacementThreshold(0.01)
+                            .restSpeedThreshold(2)
+                    }
+                    keyExtractor={item => item.id}
+                    contentContainerStyle={{ paddingTop: 208 }}
+                    style={{ flexGrow: 0 }}
+                    renderItem={({ item, index }) => (
+                        <Player
+                            name={item.name}
+                            onRemove={() => removePlayer(item.id)}
+                            onChangeText={(value) => {
+                                const newPlayers = [...players];
+                                newPlayers[index].name = value;
+                                setPlayers(newPlayers);
+                            }}
+                        />
+                    )}
+                />
+
+                <Animated.View className="items-center flex-row mx-4 mb-6">
+                    <Animated.View className="flex-1 mr-3">
+                        <MainInput
+                            value={name}
+                            onChangeText={setName}
+                            onSubmitEditing={addPlayer}
+                        />
+                    </Animated.View>
+                    <AddButon onPress={addPlayer} />
+                </Animated.View>
+            </KeyboardAvoidingView>
+        </View>
     )
 }

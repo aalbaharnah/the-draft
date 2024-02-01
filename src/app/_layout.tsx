@@ -20,13 +20,13 @@ export default function Layout() {
     if (!fontsLoaded) {
         return (
             <View className="flex-1 items-center justify-center bg-background">
-                <Text>...</Text>
+                <Text>...دقيقة</Text>
             </View>
         )
     }
 
     return (
-        <View className="flex-1">
+        <View className="flex-1 bg-background">
             {/* Main Stack */}
             <Stack screenOptions={{ headerShown: false }} />
         </View>
