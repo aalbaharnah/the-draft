@@ -15,6 +15,7 @@ export default function MainInput(props: Props) {
 
     const animatedStyle = useAnimatedStyle(() => ({
         borderColor: interpolateColor(active.value, [0, 1], ["#FFF", "#000"]),
+        borderRadius: interpolate(active.value, [0, 1], [8, 14]),
     }), [])
 
     const onFocus = () => {
@@ -40,7 +41,7 @@ export default function MainInput(props: Props) {
             onFocus={onFocus}
             onBlur={onBlur}
             onChangeText={props.onChangeText}
-            className="bg-white rounded-lg border-2 h-12 px-2 font-Rakkas"
+            className="bg-white border-2 h-12 px-2 font-Rakkas"
             onSubmitEditing={props.onSubmitEditing}
         />
     )

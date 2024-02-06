@@ -1,6 +1,6 @@
 import { View, Platform, Keyboard } from "react-native";
 import Constants from "expo-constants";
-import Animated, { FadeInDown, useSharedValue, withDelay, withSpring, LinearTransition, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate, withTiming, Easing, } from "react-native-reanimated";
+import Animated, { FadeInDown, useSharedValue, withDelay, withSpring, LinearTransition, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate, withTiming, Easing, interpolateColor, } from "react-native-reanimated";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import AddButon from "./add-button";
 import Player from "./player";
@@ -14,6 +14,8 @@ import useDimensions from "../../../hooks/useDimensions";
 export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
     const { dispatch } = useStore();
     const y = useSharedValue(0);
+    const x = useSharedValue(0);
+
     const list = useAnimatedRef<Animated.FlatList<any>>();
 
     const animation = useSharedValue(0);
@@ -28,6 +30,21 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
 
     const [players, setPlayers] = useState<{ name: string, id: string }[]>([])
     const [name, setName] = useState("");
+
+    useEffect(() => {
+        if (players.length < 2) {
+            x.value = withTiming(0, {
+                duration: 400,
+                easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+            });
+            return;
+        }
+
+        x.value = withTiming(1, {
+            duration: 400,
+            easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+        })
+    }, [players])
 
     const addPlayer = useCallback(() => {
         if (!name || name.trim().length === 0) {
@@ -49,6 +66,7 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
 
 
     const onPress = () => {
+        if (players.length < 2) return;
         dispatch({ type: SET_PLAYERS, payload: players.map(player => player.name) })
         onNext();
     }
@@ -73,11 +91,13 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
         }
     }, [])
 
-    const animatedTextInput = useAnimatedStyle(() => {
-        return {
+    const animatedNext = useAnimatedStyle(() => {
+        return ({
+            paddingHorizontal: interpolate(x.value, [0, 1], [4, 8]),
+            color: interpolateColor(x.value, [0, 1], ["#b3b3b3", "#056CC1"]),
+        })
+    }, []);
 
-        }
-    }, [])
 
     return (
         <Container>
@@ -90,8 +110,8 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
                         className="flex-row items-center"
                         onPress={onPress}
                     >
-                        <Ionicons name="arrow-back" size={24} color="#056CC1" />
-                        <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-primary">
+                        <Ionicons name="arrow-back" size={18} color={players.length < 2 ? "#b3b3b3" : "#056CC1"} />
+                        <Animated.Text style={animatedNext} className="text-left text-2xl font-Rakkas text-primary">
                             يلا
                         </Animated.Text>
                     </Touchable>

@@ -77,7 +77,7 @@ export default function TeamsResult({ onPrev, end }: Props) {
                         <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-red">
                             اخلط
                         </Animated.Text>
-                        <Ionicons name="refresh-outline" size={24} color="#DF1E1E" />
+                        <Ionicons name="refresh-outline" size={18} color="#DF1E1E" />
                     </Touchable>
                 </Animated.View>
 
@@ -88,7 +88,7 @@ export default function TeamsResult({ onPrev, end }: Props) {
                     <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-primary">
                         لا إرجع
                     </Animated.Text>
-                    <Ionicons name="arrow-forward" size={24} color="#056CC1" />
+                    <Ionicons name="arrow-forward" size={18} color="#056CC1" />
                 </Touchable>
             </View>
             <View className="py-10">

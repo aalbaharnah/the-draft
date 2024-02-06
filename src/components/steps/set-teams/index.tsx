@@ -34,7 +34,7 @@ export default function SetTeams({ onNext, onPrev }: Props) {
                     className="flex-row items-center"
                     onPress={onNext}
                 >
-                    <Ionicons name="arrow-back" size={24} color="#056CC1" />
+                    <Ionicons name="arrow-back" size={18} color="#056CC1" />
                     <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-primary">
                         تمام
                     </Animated.Text>
@@ -48,7 +48,7 @@ export default function SetTeams({ onNext, onPrev }: Props) {
                     <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-primary">
                         دقيقة إرجع
                     </Animated.Text>
-                    <Ionicons name="arrow-forward" size={24} color="#056CC1" />
+                    <Ionicons name="arrow-forward" size={18} color="#056CC1" />
                 </Touchable>
             </View>
             <View className="py-10">
