@@ -1,5 +1,5 @@
 import { View, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
-import Constants from "expo-constants";
+
 import Animated, { FadeInDown, useSharedValue, withDelay, withSpring, LinearTransition, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate, FadeOutDown } from "react-native-reanimated";
 import { useCallback, useMemo, useState } from "react";
 import AddButon from "./add-button";
@@ -8,12 +8,14 @@ import Player from "./player";
 import MainInput from "./main-input";
 import Touchable from "../../touchable";
 import { Ionicons } from "@expo/vector-icons";
+import { SET_PLAYERS, useStore } from "../../../context/provider";
 
 
 export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
+    const { dispatch } = useStore();
     const y = useSharedValue(0);
     const list = useAnimatedRef<Animated.FlatList<any>>();
-    const { height } = useDimensions("window");
+
     const animation = useSharedValue(0);
     animation.value = withDelay(400, withSpring(1, {
         mass: 1,
@@ -45,9 +47,11 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
         y.value = event.contentOffset.y;
     });
 
-    const data = useMemo(() => {
-        return players
-    }, [players])
+
+    const onPress = () => {
+        dispatch({ type: SET_PLAYERS, payload: players.map(player => player.name) })
+        onNext();
+    }
 
     const animatedContainer = useAnimatedStyle(() => {
         return {
@@ -70,79 +74,92 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
     }, [])
 
     return (
-        <View className="flex-1 bg-background">
-            <KeyboardAvoidingView contentContainerStyle={{ height: Platform.OS === 'ios' ? height : height + Constants.statusBarHeight }} behavior="position">
-                <Animated.View className="px-4 overflow-hidden  bg-background absolute top-0 w-full" style={[animatedContainer, {
-                    paddingTop: Constants.statusBarHeight,
-                    borderColor: '#b3b3b3',
-                    zIndex: 1,
-                }]}>
-                    <View className="flex-row items-center justify-between">
-                        <Touchable
-                            className="flex-row items-center"
-                            onPress={onNext}
-                        >
-                            <Ionicons name="arrow-back" size={24} color="#056CC1" />
-                            <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-primary">
-                                يلا
-                            </Animated.Text>
-                        </Touchable>
-                        <Animated.Text
-                            style={animatedText}
-                            entering={FadeInDown.duration(200).delay(400)}
-                            className="text-right font-Rakkas my-4"
-                        >
-                            القرعة
+        <Container>
+            <Animated.View
+                style={animatedContainer}
+                className="px-4 overflow-hidden  bg-background border-[#b3b3b3] z-10 absolute top-0 w-full"
+            >
+                <View className="flex-row items-center justify-between">
+                    <Touchable
+                        className="flex-row items-center"
+                        onPress={onPress}
+                    >
+                        <Ionicons name="arrow-back" size={24} color="#056CC1" />
+                        <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-primary">
+                            يلا
                         </Animated.Text>
-                    </View>
-                    <Animated.Text style={animatedSubText} className="text-right font-Rakkas text-2xl">
-                        اضف اسماء اللاعبين الذين ستتم القرعة عليهم
+                    </Touchable>
+                    <Animated.Text
+                        style={animatedText}
+                        entering={FadeInDown.duration(200).delay(400)}
+                        className="text-right font-Rakkas my-4"
+                    >
+                        القرعة
                     </Animated.Text>
-                </Animated.View>
-                <View className="flex-1" />
+                </View>
+                <Animated.Text style={animatedSubText} className="text-right font-Rakkas text-2xl">
+                    اضف اسماء اللاعبين الذين ستتم القرعة عليهم
+                </Animated.Text>
+            </Animated.View>
+            <View className="flex-1" />
 
-                <Animated.FlatList
-                    ref={list}
-                    data={data}
-                    onScroll={onScroll}
-                    alwaysBounceVertical={false}
-                    showsVerticalScrollIndicator={false}
-                    keyboardDismissMode={'on-drag'}
-                    layout={
-                        LinearTransition.springify()
-                            .damping(23)
-                            .stiffness(100)
-                            .overshootClamping(0)
-                            .restDisplacementThreshold(0.01)
-                            .restSpeedThreshold(2)
-                    }
-                    keyExtractor={item => item.id}
-                    contentContainerStyle={{ paddingTop: 208 }}
-                    style={{ flexGrow: 0 }}
-                    renderItem={({ item, index }) => (
-                        <Player
-                            name={item.name}
-                            onRemove={() => removePlayer(item.id)}
-                            onChangeText={(value) => {
-                                const newPlayers = [...players];
-                                newPlayers[index].name = value;
-                                setPlayers(newPlayers);
-                            }}
-                        />
-                    )}
-                />
+            <Animated.FlatList
+                ref={list}
+                data={players}
+                onScroll={onScroll}
+                alwaysBounceVertical={false}
+                showsVerticalScrollIndicator={false}
+                keyboardDismissMode="on-drag"
+                keyboardShouldPersistTaps="always"
+                layout={
+                    LinearTransition.springify()
+                        .damping(23)
+                        .stiffness(100)
+                        .overshootClamping(0)
+                        .restDisplacementThreshold(0.01)
+                        .restSpeedThreshold(2)
+                }
+                keyExtractor={item => item.id}
+                contentContainerStyle={{ paddingTop: 208 }}
+                style={{ flexGrow: 0 }}
+                renderItem={({ item, index }) => (
+                    <Player
+                        name={item.name}
+                        onRemove={() => removePlayer(item.id)}
+                        onChangeText={(value) => {
+                            const newPlayers = [...players];
+                            newPlayers[index].name = value;
+                            setPlayers(newPlayers);
+                        }}
+                    />
+                )}
+            />
 
-                <Animated.View className="items-center flex-row mx-4 mb-6">
-                    <Animated.View className="flex-1 mr-3">
-                        <MainInput
-                            value={name}
-                            onChangeText={setName}
-                            onSubmitEditing={addPlayer}
-                        />
-                    </Animated.View>
-                    <AddButon onPress={addPlayer} />
+            <Animated.View className="items-center flex-row mx-4 mb-6">
+                <Animated.View className="flex-1 mr-3">
+                    <MainInput
+                        value={name}
+                        onChangeText={setName}
+                        onSubmitEditing={addPlayer}
+                    />
                 </Animated.View>
-            </KeyboardAvoidingView>
-        </View>
+                <AddButon onPress={addPlayer} />
+            </Animated.View>
+        </Container>
     )
+}
+
+const Container = ({ children }: { children: any }) => {
+    if (Platform.OS === 'ios') {
+        return (
+            <KeyboardAvoidingView
+
+                behavior="padding"
+                style={{ flex: 1 }}
+            >
+                {children}
+            </KeyboardAvoidingView>
+        )
+    }
+    return <View className="flex-1">{children}</View>
 }

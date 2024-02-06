@@ -1,6 +1,7 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { Text, View } from 'react-native';
+import Provider from '../context/provider';
 
 
 
@@ -26,9 +27,11 @@ export default function Layout() {
     }
 
     return (
-        <View className="flex-1 bg-background">
-            {/* Main Stack */}
-            <Stack screenOptions={{ headerShown: false }} />
-        </View>
+        <Provider>
+            <View className="flex-1 bg-background">
+                {/* Main Stack */}
+                <Stack screenOptions={{ headerShown: false }} />
+            </View>
+        </Provider>
     )
 }
