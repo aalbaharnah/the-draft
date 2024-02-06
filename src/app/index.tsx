@@ -1,21 +1,28 @@
 import { Platform, View } from "react-native";
 import AddPlayersStep from "../components/steps/add-players";
 import Constants from "expo-constants";
-import Animated, { Easing, scrollTo, useAnimatedRef, useDerivedValue, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { Easing, runOnJS, scrollTo, useAnimatedRef, useDerivedValue, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import useDimensions from "../hooks/useDimensions";
-import Touchable from "../components/touchable";
+import * as Haptics from 'expo-haptics';
 import SetTeams from "../components/steps/set-teams";
+import TeamsResult from "../components/steps/teams-result";
+import { useState } from "react";
 
 export default function Index() {
     const { width, height } = useDimensions('screen')
     const scrollX = useSharedValue(width * 2);
     const ref = useAnimatedRef<Animated.ScrollView>();
 
+    const [end, setEnd] = useState(false);
+
     const onNext = (step: number) => {
         scrollX.value = withTiming(step * width, {
             duration: 800,
             easing: Easing.bezier(0.5, 0.01, 0, 1),
+        }, () => {
+            runOnJS(setEnd)(step === 0);
         });
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     }
 
     useDerivedValue(() => {
@@ -36,9 +43,10 @@ export default function Index() {
                 scrollEnabled={false}
             >
                 <View style={style}>
-                    <Touchable className="h-12 w-12 items-center justify-center" onPress={() => onNext(1)}>
-                        <Animated.Text>prev</Animated.Text>
-                    </Touchable>
+                    <TeamsResult
+                        end={end}
+                        onPrev={() => onNext(1)}
+                    />
                 </View>
 
                 <View style={style}>

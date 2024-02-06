@@ -1,14 +1,14 @@
-import { View, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
-
-import Animated, { FadeInDown, useSharedValue, withDelay, withSpring, LinearTransition, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate, FadeOutDown } from "react-native-reanimated";
-import { useCallback, useMemo, useState } from "react";
+import { View, Platform, Keyboard } from "react-native";
+import Constants from "expo-constants";
+import Animated, { FadeInDown, useSharedValue, withDelay, withSpring, LinearTransition, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate, withTiming, Easing, } from "react-native-reanimated";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import AddButon from "./add-button";
-import useDimensions from "../../../hooks/useDimensions";
 import Player from "./player";
 import MainInput from "./main-input";
 import Touchable from "../../touchable";
 import { Ionicons } from "@expo/vector-icons";
 import { SET_PLAYERS, useStore } from "../../../context/provider";
+import useDimensions from "../../../hooks/useDimensions";
 
 
 export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
@@ -70,6 +70,12 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
         return {
             opacity: interpolate(y.value, [0, 10], [1, 0], 'clamp'),
             fontSize: interpolate(y.value, [0, 10, 40], [24, 18, 16], 'clamp'),
+        }
+    }, [])
+
+    const animatedTextInput = useAnimatedStyle(() => {
+        return {
+
         }
     }, [])
 
@@ -150,16 +156,41 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
 }
 
 const Container = ({ children }: { children: any }) => {
-    if (Platform.OS === 'ios') {
-        return (
-            <KeyboardAvoidingView
+    const { height } = useDimensions('screen');
+    const keyboardHeight = useSharedValue(0);
 
-                behavior="padding"
-                style={{ flex: 1 }}
-            >
-                {children}
-            </KeyboardAvoidingView>
-        )
-    }
-    return <View className="flex-1">{children}</View>
+    useEffect(() => {
+        Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow', (event) => {
+            keyboardHeight.value = withTiming(event.endCoordinates.height, {
+                duration: 400,
+                easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+            });
+        })
+
+        Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide', event => {
+            keyboardHeight.value = withTiming(0, {
+                duration: 250,
+                easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+            });
+        })
+
+        return () => {
+            Keyboard.removeAllListeners('keyboardDidShow')
+        }
+    }, [])
+
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            paddingBottom: keyboardHeight.value
+        }
+    }, [])
+
+
+    return (
+        <Animated.View
+            style={[animatedStyle, { height: height - Constants.statusBarHeight, }]}
+        >
+            {children}
+        </Animated.View>
+    )
 }

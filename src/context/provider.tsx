@@ -5,7 +5,7 @@ import React, { createContext, useReducer } from 'react';
 
 const initialState = {
     players: [],
-    teams: 0,
+    teams: 2,
 }
 
 export const SET_PLAYERS = 'SET_PLAYERS';
