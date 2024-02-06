@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.cateritapp.playground"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,6 +32,14 @@
     "plugins": [
       "expo-font",
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d57f9a38-6da2-4856-b39d-331a49bda0ef"
+      }
+    }
   }
 }

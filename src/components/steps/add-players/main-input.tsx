@@ -41,7 +41,7 @@ export default function MainInput(props: Props) {
             onFocus={onFocus}
             onBlur={onBlur}
             onChangeText={props.onChangeText}
-            className="bg-white border-2 h-12 px-2 font-Rakkas"
+            className="bg-white border-2 h-12 px-2 text-lg text-left font-Rakkas"
             onSubmitEditing={props.onSubmitEditing}
         />
     )

@@ -43,17 +43,11 @@ export default function Index() {
                 scrollEnabled={false}
             >
                 <View style={style}>
-                    <TeamsResult
-                        end={end}
-                        onPrev={() => onNext(1)}
-                    />
+                    <TeamsResult end={end} onPrev={() => onNext(1)} />
                 </View>
 
                 <View style={style}>
-                    <SetTeams
-                        onNext={() => onNext(0)}
-                        onPrev={() => onNext(2)}
-                    />
+                    <SetTeams onNext={() => onNext(0)} onPrev={() => onNext(2)} />
                 </View>
 
                 <View style={style}>
