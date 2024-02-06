@@ -1,6 +1,6 @@
 import { Text, TextInput } from "react-native";
 import Animated, { Easing, interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
-import Touchable from "../components/touchable";
+import Touchable from "../../touchable";
 
 interface Props {
     onChangeText: (value: string) => void;
