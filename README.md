@@ -10,7 +10,7 @@ Say goodbye to team picking arguments! Simple app for drafting balanced sports o
 2. Set number of teams
 3. See drafted teams
 
-## Media [media](https://imgur.com/btIEWfO)
+## Media [gif](https://imgur.com/btIEWfO.gif)
 <p align="center" width="100%">
     <img width="33%" al="media" src="https://imgur.com/btIEWfO.gif" />
 </p>
