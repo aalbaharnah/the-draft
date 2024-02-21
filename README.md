@@ -3,7 +3,7 @@
 </p>
 
 # The Draft (القرعة)
-A short description of your app, what it does, and who it's for.
+Say goodbye to team picking arguments! Simple app for drafting balanced sports or gaming teams.
 
 ## How to Use
 1. App players names
