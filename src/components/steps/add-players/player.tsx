@@ -32,7 +32,6 @@ export default function Player(props: Props) {
             style={[animatedStyle, {
                 flexDirection: 'row',
                 alignItems: 'center',
-
                 marginHorizontal: 16,
             }]}
         >

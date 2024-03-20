@@ -1,4 +1,4 @@
-import { View, Platform, Keyboard } from "react-native";
+import { View, Platform, Keyboard, KeyboardAvoidingView } from "react-native";
 import Constants from "expo-constants";
 import Animated, { FadeInDown, useSharedValue, withDelay, withSpring, LinearTransition, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate, withTiming, Easing, interpolateColor, } from "react-native-reanimated";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -53,7 +53,7 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
         }
         setPlayers([...players, { name, id: Math.random().toString() }])
         setName("");
-        list.current?.scrollToEnd();
+        list.current?.scrollToOffset({ offset: (players.length + 1) * 80, animated: true });
     }, [name])
 
     const removePlayer = useCallback((id: string) => {
@@ -64,66 +64,34 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
         y.value = event.contentOffset.y;
     });
 
-
     const onPress = () => {
         if (players.length < 2) return;
         dispatch({ type: SET_PLAYERS, payload: players.map(player => player.name) })
         onNext();
     }
 
-    const animatedContainer = useAnimatedStyle(() => {
-        return {
-            height: interpolate(y.value, [0, 40], [200, 120], 'clamp'),
-            borderBottomWidth: interpolate(y.value, [0, 1], [0, 1], 'clamp'),
-        }
-    }, [])
-
-    const animatedText = useAnimatedStyle(() => {
-        return ({
-            fontSize: interpolate(y.value, [0, 10, 40], [48, 32, 28], 'clamp'),
-        })
-    }, [])
-
-    const animatedSubText = useAnimatedStyle(() => {
-        return {
-            opacity: interpolate(y.value, [0, 10], [1, 0], 'clamp'),
-            fontSize: interpolate(y.value, [0, 10, 40], [24, 18, 16], 'clamp'),
-        }
-    }, [])
-
-    const animatedNext = useAnimatedStyle(() => {
-        return ({
-            paddingHorizontal: interpolate(x.value, [0, 1], [4, 8]),
-            color: interpolateColor(x.value, [0, 1], ["#b3b3b3", "#056CC1"]),
-        })
-    }, []);
-
-
     return (
         <Container>
-            <Animated.View
-                style={animatedContainer}
-                className="px-4 overflow-hidden  bg-background border-[#b3b3b3] z-10 absolute top-0 w-full"
-            >
+            <Animated.View className="px-4 overflow-hidden bg-background border-[#b3b3b3] border-b pb-4 z-10 absolute top-0 w-full">
                 <View className="flex-row items-center justify-between">
                     <Touchable
                         className="flex-row items-center"
                         onPress={onPress}
                     >
                         <Ionicons name="arrow-back" size={18} color={players.length < 2 ? "#b3b3b3" : "#056CC1"} />
-                        <Animated.Text style={animatedNext} className="text-left text-2xl font-Rakkas text-primary">
+                        <Animated.Text className="text-left text-2xl font-Rakkas text-primary">
                             يلا
                         </Animated.Text>
                     </Touchable>
                     <Animated.Text
-                        style={animatedText}
+                        style={{ lineHeight: 80 }}
                         entering={FadeInDown.duration(200).delay(400)}
-                        className="text-right font-Rakkas my-4"
+                        className="text-right text-6xl font-Rakkas my-4"
                     >
                         القرعة
                     </Animated.Text>
                 </View>
-                <Animated.Text style={animatedSubText} className="text-right font-Rakkas text-2xl">
+                <Animated.Text className="text-right font-Rakkas text-2xl">
                     اضف اسماء اللاعبين الذين ستتم القرعة عليهم
                 </Animated.Text>
             </Animated.View>
@@ -177,18 +145,18 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
 
 const Container = ({ children }: { children: any }) => {
     const { height } = useDimensions('screen');
-    const keyboardHeight = useSharedValue(0);
+    const keyboardHeight = useSharedValue(16);
 
     useEffect(() => {
         Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow', (event) => {
-            keyboardHeight.value = withTiming(event.endCoordinates.height, {
+            keyboardHeight.value = withTiming(50, {
                 duration: 400,
                 easing: Easing.bezier(0.25, 0.1, 0.25, 1),
             });
         })
 
         Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide', event => {
-            keyboardHeight.value = withTiming(0, {
+            keyboardHeight.value = withTiming(16, {
                 duration: 250,
                 easing: Easing.bezier(0.25, 0.1, 0.25, 1),
             });
@@ -205,12 +173,13 @@ const Container = ({ children }: { children: any }) => {
         }
     }, [])
 
-
     return (
-        <Animated.View
-            style={[animatedStyle, { height: height - Constants.statusBarHeight, }]}
-        >
-            {children}
-        </Animated.View>
+        <KeyboardAvoidingView behavior="position">
+            <Animated.View
+                style={[animatedStyle, { height: height - Constants.statusBarHeight }]}
+            >
+                {children}
+            </Animated.View>
+        </KeyboardAvoidingView>
     )
 }
