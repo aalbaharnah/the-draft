@@ -16,6 +16,9 @@ export default function Layout() {
         ['Lateef-Regular']: require('../../assets/fonts/Lateef-Regular.ttf'),
         ['Lateef-SemiBold']: require('../../assets/fonts/Lateef-SemiBold.ttf'),
         ['Rakkas-Regular']: require('../../assets/fonts/Rakkas-Regular.ttf'),
+        ['RawasiDisplay-Black']: require('../../assets/fonts/RawasiDisplay-Black.otf'),
+        ['RawasiDisplay-Bold']: require('../../assets/fonts/RawasiDisplay-Bold.otf'),
+        ['RawasiDisplay-Regular']: require('../../assets/fonts/RawasiDisplay-Regular.otf')
     });
 
     if (!fontsLoaded) {

@@ -11,7 +11,8 @@ import { SET_PLAYERS, useStore } from "../../../context/provider";
 import useDimensions from "../../../hooks/useDimensions";
 
 
-export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
+export default function
+    AddPlayersStep({ onNext }: { onNext: () => void }) {
     const { dispatch } = useStore();
     const y = useSharedValue(0);
     const x = useSharedValue(0);
@@ -78,20 +79,22 @@ export default function AddPlayersStep({ onNext }: { onNext: () => void }) {
                         className="flex-row items-center"
                         onPress={onPress}
                     >
-                        <Ionicons name="arrow-back" size={18} color={players.length < 2 ? "#b3b3b3" : "#056CC1"} />
-                        <Animated.Text className="text-left text-2xl font-Rakkas text-primary">
+                        <View className="mr-2">
+                            <Ionicons name="arrow-back" size={18} color={players.length < 2 ? "#b3b3b3" : "#056CC1"} />
+                        </View>
+                        <Animated.Text className="text-left text-xl top-2 font-Rawasi-regular text-primary">
                             يلا
                         </Animated.Text>
                     </Touchable>
                     <Animated.Text
                         style={{ lineHeight: 80 }}
                         entering={FadeInDown.duration(200).delay(400)}
-                        className="text-right text-6xl font-Rakkas my-4"
+                        className="text-right text-4xl font-Rawasi-regular my-4"
                     >
                         القرعة
                     </Animated.Text>
                 </View>
-                <Animated.Text className="text-right font-Rakkas text-2xl">
+                <Animated.Text className="text-right font-Rawasi-regular text-xl">
                     اضف اسماء اللاعبين الذين ستتم القرعة عليهم
                 </Animated.Text>
             </Animated.View>

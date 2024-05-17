@@ -40,7 +40,7 @@ export default function Player(props: Props) {
                     placeholder="اسم اللاعب"
                     value={props.name}
                     onChangeText={props.onChangeText}
-                    className="h-8 px-2 font-Rakkas self-start text-left text-lg"
+                    className="h-8 px-2 font-Rawasi-regular top-4 self-start text-left text-lg"
                 />
             </Animated.View>
             <Touchable

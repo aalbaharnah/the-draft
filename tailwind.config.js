@@ -23,6 +23,9 @@ module.exports = {
         ['Lateef-SemiBold']: ['Lateef-SemiBold'],
         Lateef: ['Lateef-Medium'],
         Rakkas: ['Rakkas-Regular'],
+        ['Rawasi-black']: ['RawasiDisplay-Black'],
+        ['Rawasi-bold']: ['RawasiDisplay-Bold'],
+        ['Rawasi-regular']: ['RawasiDisplay-Regular']
       },
     },
   },

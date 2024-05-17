@@ -74,7 +74,7 @@ export default function TeamsResult({ onPrev, end }: Props) {
                         onPress={onRedo}
                     >
 
-                        <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-red">
+                        <Animated.Text className="text-left text-2xl px-2 font-Rawasi-regular text-red">
                             اخلط
                         </Animated.Text>
                         <Ionicons name="refresh-outline" size={18} color="#DF1E1E" />
@@ -85,7 +85,7 @@ export default function TeamsResult({ onPrev, end }: Props) {
                     className="flex-row items-center"
                     onPress={onPrev}
                 >
-                    <Animated.Text className="text-left text-2xl px-2 font-Rakkas text-primary">
+                    <Animated.Text className="text-left text-2xl px-2 font-Rawasi-regular text-primary">
                         لا إرجع
                     </Animated.Text>
                     <Ionicons name="arrow-forward" size={18} color="#056CC1" />
@@ -155,7 +155,7 @@ const Team = (props: TeamProps) => {
         >
             {props.team.map((player, i) => {
                 return (
-                    <Animated.Text key={i.toString()} className="text-right font-Rakkas text-lg">
+                    <Animated.Text key={i.toString()} className="text-right font-Rawasi-regular text-lg">
                         {player}
                     </Animated.Text>
                 )
