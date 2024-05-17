@@ -16,9 +16,11 @@ export default function Index() {
     const [end, setEnd] = useState(false);
 
     const onNext = (step: number) => {
-        scrollX.value = withTiming(step * width, {
-            duration: 800,
-            easing: Easing.bezier(0.5, 0.01, 0, 1),
+        scrollX.value = withSpring(step * width, {
+            stiffness: 500,
+            damping: 50,
+            mass: 1,
+            
         }, () => {
             runOnJS(setEnd)(step === 0);
         });

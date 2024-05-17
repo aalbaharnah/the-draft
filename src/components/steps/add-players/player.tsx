@@ -1,5 +1,5 @@
 import { Text, TextInput } from "react-native";
-import Animated, { Easing, interpolate, runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { Easing, interpolate, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import Touchable from "../../touchable";
 
 interface Props {
@@ -16,7 +16,7 @@ export default function Player(props: Props) {
         height.value = withTiming(0, {
             duration: 400,
             easing: Easing.inOut(Easing.ease),
-        }, () =>{
+        }, () => {
             runOnJS(props.onRemove)();
         })
     }

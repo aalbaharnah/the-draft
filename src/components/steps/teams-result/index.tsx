@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { useStore } from "../../../context/provider"
 import Touchable from "../../touchable";
-import Animated, { interpolate, Easing, useAnimatedStyle, useSharedValue, withDelay, withTiming, withSpring, ReduceMotion } from "react-native-reanimated";
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withDelay, withSpring, ReduceMotion } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { useLayoutEffect, useState } from "react";
 import { generateRandomColor } from "../../../lib/utils";
