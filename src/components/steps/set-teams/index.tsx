@@ -35,7 +35,7 @@ export default function SetTeams({ onNext, onPrev }: Props) {
                     onPress={onNext}
                 >
                     <Ionicons name="arrow-back" size={18} color="#056CC1" />
-                    <Animated.Text className="text-left text-2xl px-2 font-Rawasi-regular text-primary">
+                    <Animated.Text className="text-left text-xl top-2 px-2 font-Rawasi-regular text-primary">
                         تمام
                     </Animated.Text>
                 </Touchable>
@@ -45,14 +45,14 @@ export default function SetTeams({ onNext, onPrev }: Props) {
                     className="flex-row items-center"
                     onPress={onPrev}
                 >
-                    <Animated.Text className="text-left text-2xl px-2 font-Rawasi-regular text-primary">
+                    <Animated.Text className="text-left text-xl top-2 px-2 font-Rawasi-regular text-primary">
                         دقيقة إرجع
                     </Animated.Text>
                     <Ionicons name="arrow-forward" size={18} color="#056CC1" />
                 </Touchable>
             </View>
-            <View className="py-10">
-                <Animated.Text className="text-right font-Rawasi-regular text-2xl">
+            <View>
+                <Animated.Text className="text-right font-Rawasi-bold text-2xl leading-[55px] top-2">
                     حدد كم فريق تحتاج
                 </Animated.Text>
             </View>
@@ -110,7 +110,7 @@ const Number = ({ number, y, index, last }: NumberProps) => {
             className="flex-row items-center h-12 justify-center"
         >
             {last ? null : (
-                <Animated.Text className="text-2xl font-Rawasi-regular text-primary">
+                <Animated.Text className="text-4xl leading-[64px] font-Rawasi-bold text-primary">
                     {number}
                 </Animated.Text>
             )}

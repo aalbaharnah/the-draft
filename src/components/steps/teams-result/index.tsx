@@ -3,7 +3,7 @@ import { useStore } from "../../../context/provider"
 import Touchable from "../../touchable";
 import Animated, { interpolate, Easing, useAnimatedStyle, useSharedValue, withDelay, withTiming, withSpring, ReduceMotion } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { generateRandomColor } from "../../../lib/utils";
 import useDimensions from "../../../hooks/useDimensions";
 
@@ -18,7 +18,7 @@ export default function TeamsResult({ onPrev, end }: Props) {
     const { width } = useDimensions('screen');
     const [teams, setTeams] = useState<string[][]>([]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         onRedo();
     }, [end]);
 
@@ -74,7 +74,7 @@ export default function TeamsResult({ onPrev, end }: Props) {
                         onPress={onRedo}
                     >
 
-                        <Animated.Text className="text-left text-2xl px-2 font-Rawasi-regular text-red">
+                        <Animated.Text className="text-left text-xl top-2 px-2 font-Rawasi-regular text-red">
                             اخلط
                         </Animated.Text>
                         <Ionicons name="refresh-outline" size={18} color="#DF1E1E" />
@@ -85,7 +85,7 @@ export default function TeamsResult({ onPrev, end }: Props) {
                     className="flex-row items-center"
                     onPress={onPrev}
                 >
-                    <Animated.Text className="text-left text-2xl px-2 font-Rawasi-regular text-primary">
+                    <Animated.Text className="text-left text-xl top-2 px-2 font-Rawasi-regular text-primary">
                         لا إرجع
                     </Animated.Text>
                     <Ionicons name="arrow-forward" size={18} color="#056CC1" />
