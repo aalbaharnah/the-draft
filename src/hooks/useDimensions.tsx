@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Dimensions, ScaledSize } from 'react-native';
 
 interface Params {
@@ -9,7 +9,7 @@ interface Params {
 export default function useDimensions(dim: 'window' | 'screen') {
     const [dimensions, setDimensions] = useState(Dimensions.get(dim));
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const dimensionsChange = (params: Params) => {
             setDimensions(params[dim]);
         };

@@ -1,7 +1,7 @@
 import { View, Platform, Keyboard, KeyboardAvoidingView } from "react-native";
 import Constants from "expo-constants";
 import Animated, { FadeInDown, useSharedValue, withDelay, withSpring, LinearTransition, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, interpolate, withTiming, Easing, interpolateColor, } from "react-native-reanimated";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import AddButon from "./add-button";
 import Player from "./player";
 import MainInput from "./main-input";
@@ -32,7 +32,7 @@ export default function
     const [players, setPlayers] = useState<{ name: string, id: string }[]>([])
     const [name, setName] = useState("");
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (players.length < 2) {
             x.value = withTiming(0, {
                 duration: 400,
@@ -82,19 +82,19 @@ export default function
                         <View className="mr-2">
                             <Ionicons name="arrow-back" size={18} color={players.length < 2 ? "#b3b3b3" : "#056CC1"} />
                         </View>
-                        <Animated.Text className="text-left text-xl top-2 font-Rawasi-regular text-primary">
+                        <Animated.Text className="text-left text-xl top-1 leading-[33px] font-Rawasi-bold text-primary">
                             يلا
                         </Animated.Text>
                     </Touchable>
                     <Animated.Text
                         style={{ lineHeight: 80 }}
                         entering={FadeInDown.duration(200).delay(400)}
-                        className="text-right text-4xl font-Rawasi-regular my-4"
+                        className="text-right text-4xl font-Rawasi-black my-4"
                     >
                         القرعة
                     </Animated.Text>
                 </View>
-                <Animated.Text className="text-right font-Rawasi-regular text-xl">
+                <Animated.Text className="text-right font-Rawasi-bold text-xl">
                     اضف اسماء اللاعبين الذين ستتم القرعة عليهم
                 </Animated.Text>
             </Animated.View>
@@ -150,7 +150,7 @@ const Container = ({ children }: { children: any }) => {
     const { height } = useDimensions('screen');
     const keyboardHeight = useSharedValue(16);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow', (event) => {
             keyboardHeight.value = withTiming(50, {
                 duration: 400,
